@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: staticweb
+  labels:
+    component: staticwebcomponent
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: staticwebcomponent   
+  template:
+    metadata:
+      labels: # labels to select/identify the deployment
+        component: staticwebcomponent  
+    spec:     # pod spec               
+      containers: 
+      - name: node-web-app 
+        image: theburi/node-web-app # image we pushed
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: staticwebservice
+  labels:
+    component: staticwebcomponent
+spec:
+  selector:
+    component: staticwebcomponent
+  ports:
+  - name: http
+    targetPort: 8080
+    port: 80
+  type: NodePort
