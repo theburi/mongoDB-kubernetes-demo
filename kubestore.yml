@@ -3,6 +3,7 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: staticweb
+  namespace: mongodb
   labels:
     component: staticwebcomponent
 spec:
@@ -28,6 +29,7 @@ metadata:
   name: staticwebservice
   labels:
     component: staticwebcomponent
+  namespace: mongodb
 spec:
   selector:
     component: staticwebcomponent
@@ -35,4 +37,3 @@ spec:
   - name: http
     targetPort: 8080
     port: 80
-  type: NodePort

@@ -4,6 +4,7 @@ metadata:
   name: kubestore-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
+    namespace: mongodb
 spec:
   rules:
   - http:
