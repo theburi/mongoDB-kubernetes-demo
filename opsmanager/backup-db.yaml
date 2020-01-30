@@ -1,0 +1,31 @@
+---
+apiVersion: mongodb.com/v1
+kind: MongoDB
+metadata:
+  name: demo-mongodb-oplog
+  namespace: mongodb
+spec:
+  members: 3
+  version: 4.2.2-ent
+  type: ReplicaSet
+
+  opsManager:
+    configMapRef:
+      name: opsmanager-backup-connection
+  credentials: ops-manager-admin-key
+
+---
+apiVersion: mongodb.com/v1
+kind: MongoDB
+metadata:
+  name: my-mongodb-s3
+  namespace: mongodb
+spec:
+  members: 3
+  version: 4.2.2-ent
+  type: ReplicaSet
+
+  opsManager:
+    configMapRef:
+      name: opsmanager-backup-meta-connection
+  credentials: ops-manager-admin-key

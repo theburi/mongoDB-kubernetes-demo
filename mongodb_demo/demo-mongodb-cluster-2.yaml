@@ -1,0 +1,16 @@
+---
+apiVersion: mongodb.com/v1
+kind: MongoDB
+metadata:
+  name: demo-mongodb-cluster-2
+  namespace: mongodb
+spec:
+  members: 3
+  version: 4.2.2-ent
+  type: ReplicaSet
+
+  opsManager:
+    configMapRef:
+      name: demo-cluster-2
+  credentials: ops-manager-admin-key
+

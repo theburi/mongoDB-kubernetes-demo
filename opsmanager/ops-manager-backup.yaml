@@ -1,0 +1,65 @@
+---
+apiVersion: mongodb.com/v1
+kind: MongoDBOpsManager
+metadata:
+  name: ops-manager
+spec:
+  # the number of Ops Manager instances to run. Set to value bigger
+  # than 1 to get high availability and upgrades without downtime
+  replicas: 1
+
+  # the version of Ops Manager distro to use
+  version: 4.2.7
+
+  # the name of the secret containing admin user credentials.
+  # Either remove the secret or change the password using Ops Manager UI after the Ops Manager
+  # resource is created!
+  adminCredentials: adminopsmanager
+
+  # the Ops Manager configuration. All the values must be of type string
+  configuration:
+    mms.fromEmailAddr: "test@test.com"
+    automation.versions.source: "local"
+    automation.versions.directory: "/mongodb-ops-manager/mongodb-releases/"
+    mms.preflight.run: "false"
+    mms.ignoreInitialUiSetup: "true"    
+    mms.replyToEmailAddr: "test@test.com"
+    mms.adminEmailAddr: "test@test.com"
+    mms.mail.transport: "smtps"
+    mms.mail.hostname: "mail.example.com"
+    mms.mail.port: "465"
+
+  # the application database backing Ops Manager. Replica Set is the only supported type
+  # Application database has the SCRAM-SHA authentication mode always enabled
+  applicationDatabase:
+    members: 3
+    # version: 4.2.0
+    persistent: true
+    podSpec:
+      cpu: '0.25'
+  externalConnectivity:
+    # LoadBalancer|NodePort
+    type: LoadBalancer
+    # optional, corresponds to nodePort port
+    # port: 30100
+  backup:
+    enabled: true
+    opLogStores:
+      - name: oplog1
+        mongodbResourceRef:
+          name: demo-mongodb-oplog
+     # Configures the list of S3 Snapshot Configs
+    s3Stores:
+      - name: s3storeDemo
+        # reference to MongoDB used for storing S3 Snapshot Metadata
+        mongodbResourceRef:
+          name: my-mongodb-s3
+        # optional, specify if s3 metadata database has SCRAM-SHA authentication enabled
+        # mongodbUserRef:
+        #   name: my-user
+        # the name of the secret which contains aws credentials (TODO field names)
+        s3SecretRef:
+          name: s3-credentials
+        s3BucketEndpoint: s3.us-west-1.amazonaws.com
+        s3BucketName: opsmanager-backup
+        pathStyleAccessEnabled: true
