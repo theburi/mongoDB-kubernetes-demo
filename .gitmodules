@@ -1,0 +1,3 @@
+[submodule "mongodb-enterprise-kubernetes"]
+	path = mongodb-enterprise-kubernetes
+	url = https://github.com/mongodb/mongodb-enterprise-kubernetes
