@@ -12,12 +12,12 @@ There are three parts
 3. Start first MongoDB cluster
 
 
-For this demo we will be using local Kubernetes cluster, however any Kubernetes cluster will work. Don't forget to set the right kubectl context. in our case it called `docker-desktop`
+For this demo we will be using local Kubernetes cluster, however any Kubernetes cluster will work. Don't forget to set the right kubectl context. In this case it called `docker-desktop`
 
 1. Install CRD and start Operator
    
-MongoDB Operator repository https://github.com/mongodb/mongodb-enterprise-kubernetes is added as a submodule.
-This project contains CRD and Operator yaml that we will use in this demo. 
+MongoDB Operator repository https://github.com/mongodb/mongodb-enterprise-kubernetes is added as a submodule to this project.
+It contains CRD and Operator yaml that we will use in this demo. 
 
    - Lets install CRD into our Kubernetes cluster. This command requires Admin permission.
 ```bash
@@ -25,13 +25,13 @@ cd mongodb-enterprise-kubernetes
 kubectl apply -f crds.yaml
 ```
 
-At this stage Kubernetes is aware of 3 new Resources. However there is not controllers in Kuberenetes that manager them. This is where operator comes in. 
+3 New Resource Defeinitons has been added to Kubernetes. However there are not controllers in Kuberenetes that manager them. This is where MongoDB Operator comes in. 
 customresourcedefinition.apiextensions.k8s.io/mongodb.mongodb.com 
 customresourcedefinition.apiextensions.k8s.io/mongodbusers.mongodb.com 
 customresourcedefinition.apiextensions.k8s.io/opsmanagers.mongodb.com
 
    - Deploy Operator
-   First we need to provision namespace `mongodb`, we will use this namespace for our MongoDB Clusters. Note that our active context is `docker-desktop` and we will add namespace `mongodb` as a default namespace.
+   First we need to provision namespace `mongodb`, we will use this namespace for our MongoDB Clusters in this example. Note that our active context is `docker-desktop` and we will add namespace `mongodb` as a default namespace.
    if you wish to use different namespace, don't forget to change it in mongodb-enterprise-kubernetes/mongodb-enterprise.yaml
    ```bash
    cd ..
@@ -57,19 +57,22 @@ customresourcedefinition.apiextensions.k8s.io/opsmanagers.mongodb.com
 
 
 ** Apply secrets for Ops manager
+```bash
 kubectl create secret generic "adminopsmanager" --from-literal=Username="<test@test.com>" --from-literal=Password='<password>' --from-literal=FirstName="First" --from-literal=LastName="Last"
+```
 
 ** Install Ops Manager Resource
-There is a sample in `mongodb-enterprise-kubernetes` repository that can be used to deploy Ops Manager. However in our demo we will use a different definition. `opsmanager/ops-manager.yaml`. Main difference is few additional configurations:
-* Application Database version is removed to allow Operator to manage Version of Backup Database. This is prefered solution especially when our Kubernetes cluster has no access to the Internet
+
+There is a sample in `mongodb-enterprise-kubernetes` repository that can be used to deploy Ops Manager. However in our demo we will use a slightly modified definition `opsmanager/ops-manager.yaml`. The main difference is few additional configurations:
+* Application Database version is removed to allow Operator to manage Version of Backing Database. This is prefered solution especially when our Kubernetes cluster has no access to the Internet
 * spec.configuration contains few OpsManager settings:
-   mms.preflight.run: "false" - will disable verifications used when OpsManager runs in the VM's.
+   mms.preflight.run: "false" - will disable verifications used when OpsManager runs inside a VM.
    mms.ignoreInitialUiSetup: "true" - will disable startup Wizard 
    all other properties are reqires for the minimal initial configuration of OpsManager
 * Local Mode configuration
    automation.versions.source: "local"
    automation.versions.directory: "/mongodb-ops-manager/mongodb-releases/" - location of MongoDB packages
-* spec.backup is enaled but not other backup configuration is provided in this step.
+* spec.backup is enabled but no other backup configuration is provided in this step.
 
 ```bash
 $ kubectl apply -f samples/ops-manager/ops-manager.yaml
@@ -79,9 +82,9 @@ This might take 5-7 minute for Operator to provision nessesary Kuberentes resour
 
 To montior installation progress:
 * watch for ops-manager-0 pod to get into running stage. Tailing Operator logs would provide more information
-* as soon as ops-manager-0 pod is in running stage, tailing logs would provide information about OpsManager startup parameters
+* as soon as ops-manager-0 pod is in Running stage, tailing logs would provide information about OpsManager startup progress
 
-In our example we use Kuberentes loadbalancer to expose OpsManager ourside of cluster. As soon as Ops Manager is running we could get a url of external service endpoint.
+In our example we use Kuberentes loadbalancer to expose OpsManager outside of cluster. As soon as Ops Manager is running we could get a url of external service endpoint.
 
 ```bash
 $ kubectl get svc
@@ -90,23 +93,23 @@ $ kubectl get svc
 Expect to get a line similar to this example.
 ps-manager-svc-ext   LoadBalancer   10.100.195.127   a754a2e4f42c811eab34416328af91c3-1037012861.us-east-1.elb.amazonaws.com   8080:32209/TCP   15h
 
-Ops Manager is expose on this url http://a754a2e4f42c811eab34416328af91c3-1037012861.us-east-1.elb.amazonaws.com:8080
+Ops Manager is exposes on this url http://a754a2e4f42c811eab34416328af91c3-1037012861.us-east-1.elb.amazonaws.com:8080
 
 Note: TLS configuration will be avaialble in few weeks. Alternativly it is possilbe to use Ingress controller like nginx or Traefik with Letsencrypt to secure this endpoint.
 
-User Name and password for Admin has been defined above in `adminopsmanager` secret.
+Note: User Name and password for Admin user has been defined above in `adminopsmanager` secret.
 
 ** Since we are running Ops Manager in Local Mode we need to copy MongoDB releases into designated folder in Ops Manager. 
 
-First we need to download nessesary MongoDB .tgz file locally from mongodb.com/download
+First we need to download nessesary MongoDB .tgz file locally from https://www.mongodb.com/download-center/enterprise
 
-** Copy file needed to launch MongoDB clusters in Local Mode.
+** Copy packages needed to launch MongoDB clusters in Local Mode.
+Example of Mongodb 4.2.2 Enterpise package
 ```bash
 $ kubectl cp  ~/Downloads/mongodb-linux-x86_64-enterprise-ubuntu1604-4.2.2.tgz ops-manager-0:/mongodb-ops-manager/mongodb-releases/mongodb-linux-x86_64-enterprise-ubuntu1604-4.2.2.tgz
 ```
-Thsi will allow us to start MongoDB 4.2.2 Enterpise cluster in Kubernetes
 
-Note: Operator 1.4.2 does not create Persist Volume for these packages. However this will be addressed in 1.4.3.
+Note: Operator v 1.4.2 does not create Persistent Volume this location. However this will be addressed in 1.4.3.
 
 * Now we are ready to Configure Ops Manager Backup
 
@@ -114,7 +117,7 @@ Note: Operator 1.4.2 does not create Persist Volume for these packages. However 
 ```bash
 kubectl create secret generic s3-credentials   --from-literal=accessKey="AKIAWZC4C4LCBIFWEKW7" --from-literal=secretKey="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"
 ```
-** Apply DataBases needed for Backup
+** Deploy DataBases needed for Backup infrastructure 
 ```bash
 kubectl apply opsmanager/backup-db.yaml
 ```
@@ -123,7 +126,7 @@ kubectl apply opsmanager/backup-db.yaml
 kubectl apply -f opsmanager/ops-manager-backup.yaml
 ```
 
-* No we are ready to depoy MongoDB clusters.
+* At this point we are ready to depoy MongoDB clusters.
 
 We included few sample files to deploy MongoDB clusters
 
