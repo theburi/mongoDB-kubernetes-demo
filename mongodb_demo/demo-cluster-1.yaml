@@ -5,9 +5,9 @@ metadata:
   name: demo-cluster-1
 data:
   projectName: demo-cluster-1
-  baseUrl: http://ae25bfead41f711eab34416328af91c3-454098861.us-east-1.elb.amazonaws.com:8080
+  baseUrl: http://a754a2e4f42c811eab34416328af91c3-1037012861.us-east-1.elb.amazonaws.com:8080
 
   # Optional parameters
 
   # If orgId is omitted a new organization will be created, with the same name as the Project.
-  orgId: 5e318b18d4aa2c00643214b7
+  # orgId: 5e318b18d4aa2c00643214b7

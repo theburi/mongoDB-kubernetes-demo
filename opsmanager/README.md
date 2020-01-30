@@ -17,7 +17,7 @@ kubectl cp  ~/Downloads/mongodb-linux-x86_64-enterprise-ubuntu1604-4.2.2.tgz ops
 
 ** Apply Backup S3 bucket keys
 
-kubectl create secret generic s3-credentials   --from-literal=accessKey="AKIAWZC4C4LCBIFWEKW7" --from-literal=secretKey="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"
+kubectl create secret generic s3-credentials   --from-literal=accessKey="" --from-literal=secretKey=""
 
 ** Apply DataBases needed for Backup
 
