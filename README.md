@@ -115,7 +115,7 @@ Note: Operator v 1.4.2 does not create Persistent Volume this location. However 
 
 ** Apply Backup S3 bucket keys
 ```bash
-kubectl create secret generic s3-credentials   --from-literal=accessKey="AKIAWZC4C4LCBIFWEKW7" --from-literal=secretKey="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"
+kubectl create secret generic s3-credentials   --from-literal=accessKey="" --from-literal=secretKey=""
 ```
 ** Deploy DataBases needed for Backup infrastructure 
 ```bash
