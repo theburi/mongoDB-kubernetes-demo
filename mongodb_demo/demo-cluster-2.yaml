@@ -5,7 +5,7 @@ metadata:
   name: demo-cluster-2
 data:
   projectName: demo-cluster-2
-  baseUrl: http://ae25bfead41f711eab34416328af91c3-454098861.us-east-1.elb.amazonaws.com:8080
+  baseUrl: http://a754a2e4f42c811eab34416328af91c3-1037012861.us-east-1.elb.amazonaws.com:8080
 
   # Optional parameters
 
