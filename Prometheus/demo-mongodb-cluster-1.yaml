@@ -1,0 +1,26 @@
+---
+apiVersion: mongodb.com/v1
+kind: MongoDB
+metadata:
+  name: demo-mongodb-cluster-1
+  namespace: mongodb
+spec:
+  members: 3
+  version: 4.2.3-ent
+  type: ReplicaSet
+
+  opsManager:
+    configMapRef:
+      name: demo-cluster-confmap
+  credentials: cm-credentials
+  
+  subresources:
+    # status enables the status subresource.
+
+    scale:
+      specReplicasPath: .spec.members
+      statusReplicasPath: .status.replicas
+      labelSelectorPath: .status.selector
+
+
+

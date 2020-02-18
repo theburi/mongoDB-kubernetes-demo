@@ -1,0 +1,6 @@
+mongodb:
+  uri: 'mongodb://demo-mongodb-cluster-1-0.demo-mongodb-cluster-1-svc.mongodb.svc.cluster.local:27017,demo-mongodb-cluster-1-1.demo-mongodb-cluster-1-svc.mongodb.svc.cluster.local:27017,demo-mongodb-cluster-1-2.demo-mongodb-cluster-1-svc.mongodb.svc.cluster.local:27017/admin?replicaSet=demo-mongodb-cluster-1'
+serviceMonitor:
+  namespace: 'default'
+  additionalLabels: 
+    { release: 'prometheus-chart'}

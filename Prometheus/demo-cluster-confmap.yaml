@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: demo-cluster-confmap
+  namespace: mongodb
+data:
+  projectName: demo-cluster-prom
+  baseUrl: https://cloud.mongodb.com
+
+  # Optional parameters
+
+  # If orgId is omitted a new organization will be created, with the same name as the Project.
+  orgId: 5b30f7d7d383ad6499f230b1
