@@ -13,7 +13,9 @@ kubectl apply -f opsmanager/ops-manager.yaml
 
 ** Copy file needed to launch clusters in Local Mode
 
-kubectl cp  ~/Downloads/mongodb-linux-x86_64-enterprise-ubuntu1604-4.2.2.tgz ops-manager-0:/mongodb-ops-manager/mongodb-releases/mongodb-linux-x86_64-enterprise-ubuntu1604-4.2.2.tgz
+wget https://downloads.mongodb.com/linux/mongodb-linux-x86_64-enterprise-ubuntu1604-4.2.0.tgz
+
+kubectl cp  mongodb-linux-x86_64-enterprise-ubuntu1604-4.2.0.tgz ops-manager-0:/mongodb-ops-manager/mongodb-releases/mongodb-linux-x86_64-enterprise-ubuntu1604-4.2.0.tgz
 
 ** Apply Backup S3 bucket keys
 
