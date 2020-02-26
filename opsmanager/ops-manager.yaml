@@ -14,8 +14,20 @@ spec:
   # the name of the secret containing admin user credentials.
   # Either remove the secret or change the password using Ops Manager UI after the Ops Manager
   # resource is created!
-  adminCredentials: adminopsmanager
-
+  adminCredentials: adminopsmanager  
+  podSpec:
+    podTemplate:
+        spec:
+          volumes:
+            - name: opsmanager-packages-volume
+              # replace this with a real persistent volume
+              persistentVolumeClaim:
+                claimName: opsmanager-packages-claim
+          containers:
+            - name: mongodb-ops-manager
+              volumeMounts:
+                - mountPath: /mongodb-ops-manager/mongodb-releases/
+                  name: opsmanager-packages-volume
   # the Ops Manager configuration. All the values must be of type string
   configuration:
     mms.fromEmailAddr: "test@test.com"
@@ -42,5 +54,4 @@ spec:
     type: LoadBalancer
     # optional, corresponds to nodePort port
     # port: 30100
-  backup:
-    enabled: true
+
