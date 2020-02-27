@@ -22,6 +22,12 @@ To check run `kubectl get pvc` and ensure that PVC has the following status
 In some cases a new storage class with Immidiate provisioning could help to fulfill pvc.
 We included a sample of storage class opsmanager/packages-sc.yaml
 
+** Generate Ops Manager API Key and create new secret. Operator needs API Keys to authenticate with Ops Manager and configure clusters.
+
+https://docs.opsmanager.mongodb.com/current/tutorial/manage-agent-api-key/
+
+kubectl create secret generic backup-credentials  --from-literal="user=<key or email>" --from-literal="publicApiKey=<private key>"
+
 ** Launch Ops Manager without Backup
 
 ```
