@@ -1,13 +1,15 @@
 ---
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: demo-cluster-2
+  namespace: mongodb
 data:
-  projectName: demo-cluster-2
-  baseUrl: http://a754a2e4f42c811eab34416328af91c3-1037012861.us-east-1.elb.amazonaws.com:8080
+  projectName: demo-cluster-standalone
+  baseUrl: https://cloud.mongodb.com
 
   # Optional parameters
 
   # If orgId is omitted a new organization will be created, with the same name as the Project.
-  orgId: 5e318b18d4aa2c00643214b7
+  orgId: 5b30f7d7d383ad6499f230b1

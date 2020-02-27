@@ -12,7 +12,7 @@ spec:
   opsManager:
     configMapRef:
       name: opsmanager-backup-connection
-  credentials: ops-manager-admin-key
+  credentials: backup-credentials
 
 ---
 apiVersion: mongodb.com/v1
@@ -28,4 +28,4 @@ spec:
   opsManager:
     configMapRef:
       name: opsmanager-backup-meta-connection
-  credentials: ops-manager-admin-key
+  credentials: backup-credentials
