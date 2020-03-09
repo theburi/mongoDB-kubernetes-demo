@@ -62,3 +62,30 @@ kubectl apply opsmanager/backup-db.yaml
 kubectl apply -f opsmanager/ops-manager-backup.yaml
 ```
 
+** Configure Container Register that requires authentication 
+
+First step. lets create Secrete that will hold credentials for container registry
+
+```
+kubectl create secret docker-registry regcred --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
+```
+
+There are two methods to configure auth of container registry
+
+1. Add this secrete to each Resource PodSpecTemplate
+spec:
+    podSpec:
+        podTemplate:
+            imagePullSecret:
+              - name: regcred
+
+2. Add this secrete to a Service account. 
+if the pod does not contain any ``ImagePullSecrets``, then ``ImagePullSecrets`` of the ``ServiceAccount`` are added to the pod.
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#add-imagepullsecrets-to-a-service-account
+
+for OpsManager we use two service accounts: mongodb-enterprise-appdb and mongodb-enterprise-database-pods
+
+```
+imagePullSecret:
+    - name: regcred
+  ```
