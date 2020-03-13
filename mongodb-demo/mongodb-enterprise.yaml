@@ -1,11 +1,11 @@
----
+##---
 # Source: mongodb-enterprise-operator/templates/operator-roles.yaml
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: mongodb-enterprise-operator
-  namespace: mongodb
+  namespace: project1
 
 
 ---
@@ -13,7 +13,7 @@ kind:  Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: mongodb-enterprise-operator
-  namespace: mongodb
+  namespace: project1
 rules:
 - apiGroups:
   - ""
@@ -54,12 +54,31 @@ rules:
   - delete
   - update
 
+# This ClusterRoleBinding is necessary in order to use validating
+# webhooks—these will prevent you from applying a variety of invalid resource
+# definitions. The validating webhooks are optional so this can be removed if
+# necessary.
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: mongodb-enterprise-operator-mongodb-webhook-binding
+  namespace: project1
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: mongodb-enterprise-operator-mongodb-webhook
+subjects:
+- kind: ServiceAccount
+  name: mongodb-enterprise-operator
+  namespace: project1
+
 ---
 kind:  RoleBinding 
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: mongodb-enterprise-operator
-  namespace: mongodb
+  namespace: project1
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind:  Role 
@@ -67,7 +86,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: mongodb-enterprise-operator
-  namespace: mongodb
+  namespace: project1
 
 # This ClusterRole is needed if the user wants to use the Kubernetes CA
 # infrastructure to generate certificates.
@@ -92,7 +111,7 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: mongodb-enterprise-operator-mongodb-certs-binding
-  namespace: mongodb
+  namespace: project1
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -100,31 +119,31 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: mongodb-enterprise-operator
-  namespace: mongodb
+  namespace: project1
 
 
----
+##---
 # Source: mongodb-enterprise-operator/templates/database-roles.yaml
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: mongodb-enterprise-appdb
-  namespace: mongodb
+  namespace: project1
 
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: mongodb-enterprise-database-pods
-  namespace: mongodb
+  namespace: project1
 
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: mongodb-enterprise-appdb
-  namespace: mongodb
+  namespace: project1
 rules:
   - apiGroups:
       - ""
@@ -138,7 +157,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: mongodb-enterprise-appdb
-  namespace: mongodb
+  namespace: project1
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -146,16 +165,16 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: mongodb-enterprise-appdb
-    namespace: mongodb
+    namespace: project1
 
----
+##---
 # Source: mongodb-enterprise-operator/templates/operator.yaml
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb-enterprise-operator
-  namespace: mongodb
+  namespace: project1
 spec:
   replicas: 1
   selector:
@@ -173,7 +192,7 @@ spec:
 
       containers:
       - name: mongodb-enterprise-operator
-        image: quay.io/mongodb/mongodb-enterprise-operator-prerelease:1.4.2-89-g2526f45
+        image: quay.io/mongodb/mongodb-enterprise-operator:1.4.4
         imagePullPolicy: Always
         env:
         - name: OPERATOR_ENV
@@ -187,12 +206,12 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: MONGODB_ENTERPRISE_DATABASE_IMAGE
-          value: quay.io/mongodb/mongodb-enterprise-database-prerelease:1.4.2-93-g0e1bcd6
+          value: quay.io/mongodb/mongodb-enterprise-database:1.4.4
         - name: IMAGE_PULL_POLICY
           value: Always
         - name: OPS_MANAGER_IMAGE_REPOSITORY
-          value: quay.io/mongodb/mongodb-enterprise-ops-manager-prerelease
+          value: quay.io/mongodb/mongodb-enterprise-ops-manager
         - name: OPS_MANAGER_IMAGE_PULL_POLICY
           value: Always
         - name: APP_DB_IMAGE_REPOSITORY
-          value: quay.io/mongodb/mongodb-enterprise-appdb-prerelease
+          value: quay.io/mongodb/mongodb-enterprise-appdb

@@ -132,7 +132,7 @@ kubectl apply -f opsmanager/ops-manager-backup.yaml
 
 We included few sample files to deploy MongoDB clusters
 
-`./mongodb_demo/` contains few of these examples
+`./mongodb-demo/` contains few of these examples
 
 In order to deploy mongodb cluster we need to create ConfigMap and MongoDB Resource.
 

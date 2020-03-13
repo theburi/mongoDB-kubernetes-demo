@@ -1,13 +1,12 @@
 ---
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: demo-cluster-2
   namespace: mongodb
 data:
-  projectName: demo-cluster-standalone
-  baseUrl: https://cloud.mongodb.com
+  projectName: demo-cluster-2
+  baseUrl: http://a9dbfa3b4596911ea853f02b5d57cb91-1402900136.eu-west-1.elb.amazonaws.com:8080
 
   # Optional parameters
 

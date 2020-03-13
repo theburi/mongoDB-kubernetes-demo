@@ -3,7 +3,7 @@ apiVersion: mongodb.com/v1
 kind: MongoDB
 metadata:
   name: demo-mongodb-cluster-1
-  namespace: mongodb
+  namespace: project1
 spec:
   members: 3
   version: 4.2.3-ent
@@ -12,5 +12,5 @@ spec:
   opsManager:
     configMapRef:
       name: demo-cluster-1
-  credentials: ops-manager-admin-key
+  credentials: opsmanager-org-access-key
 
