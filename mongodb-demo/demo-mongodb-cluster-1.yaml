@@ -3,7 +3,7 @@ apiVersion: mongodb.com/v1
 kind: MongoDB
 metadata:
   name: demo-mongodb-cluster-1
-  namespace: project1
+  # namespace: project1
 spec:
   members: 3
   version: 4.2.3-ent

@@ -3,12 +3,12 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: demo-cluster-1
-  namespace: project1
+  # namespace: m
 data:
   projectName: demo-cluster-1
-  baseUrl: http://a9dbfa3b4596911ea853f02b5d57cb91-1402900136.eu-west-1.elb.amazonaws.com:8080
+  baseUrl: http://a55fbb5a2848f11eaaa090214ecb1cab-857889018.eu-west-1.elb.amazonaws.com:8080
 
   # Optional parameters
 
   # If orgId is omitted a new organization will be created, with the same name as the Project.
-  orgId: 5e6b629cb0c9680064d8dd42
+  orgId: 5ea033ab894e8200786431a7
