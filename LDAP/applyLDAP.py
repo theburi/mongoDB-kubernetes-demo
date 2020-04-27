@@ -2,6 +2,10 @@ import requests
 from deepmerge import always_merger
 from requests.auth import HTTPDigestAuth
 
+getOMKey = '<key>'
+getOMSECRET = '<secret>'
+  
+
 def getLdapConfigForOm():
   return {
     # Secret
@@ -9,7 +13,7 @@ def getLdapConfigForOm():
     'bindQueryUser'     : 'cn=admin,dc=ldap,dc=mongodb,dc=local',
     # ConfigMap
     'authzQueryTemplate' : '{USER}?memberOf?base',
-    'servers'            : 'кувфсеув:389',
+    'servers'            : 'ec2-52-60-78-132.ca-central-1.compute.amazonaws.com:389',
     'userToDNMapping'    : '[ {  "ldapQuery": "ou=users,dc=ldap,dc=mongodb,dc=local??sub?(uid={0})", "match" : "(.+)" }  ]'  } 
 #   if isEnabled(configParameter('LDAP_ENABLED')) else None
 
@@ -41,9 +45,11 @@ def enableAuthMechanismsForProject(groupId, ldapConfig, ldapRoles):
         Returns the raw automation configuration object for an Ops Manager project.
         :param group: Project/Group ID of the Ops Manager project for which the data is being requested.
         """
+
         url = f'http://a55fbb5a2848f11eaaa090214ecb1cab-857889018.eu-west-1.elb.amazonaws.com:8080/api/public/v1.0/groups/{group}/automationConfig'
         print (url)
-        r = requests.get(url, auth=HTTPDigestAuth('LNTMCKJX', 'e7'))
+        OMKey = getOMKey()
+        r = requests.get(url, auth=HTTPDigestAuth(getOMKey, getOMSECRET))
         print ("Getting Automation Config")
         print (r)
         return r.json()
@@ -51,11 +57,11 @@ def enableAuthMechanismsForProject(groupId, ldapConfig, ldapRoles):
     def putAutomationConfig(group, conf):
           print ('Removing External policy')
           policyurl = f'http://a55fbb5a2848f11eaaa090214ecb1cab-857889018.eu-west-1.elb.amazonaws.com:8080/api/public/v1.0/groups/{group}/controlledFeature'
-          r_pol = requests.put(policyurl, headers={'Content-Type': 'application/json'}, auth=HTTPDigestAuth('LNTMCKJX', ''), json= {"policies": [],"externalManagementSystem": { "name": "Kubernetes Operator" }})
+          r_pol = requests.put(policyurl, headers={'Content-Type': 'application/json'}, auth=HTTPDigestAuth(getOMKey, getOMSECRET), json= {"policies": [],"externalManagementSystem": { "name": "Kubernetes Operator" }})
           print (r_pol.json())
           print ('Patching Automation config')
           url = f'http://a55fbb5a2848f11eaaa090214ecb1cab-857889018.eu-west-1.elb.amazonaws.com:8080/api/public/v1.0/groups/{group}/automationConfig'
-          r = requests.put(url, headers={'Content-Type': 'application/json'}, auth=HTTPDigestAuth('LNTMCKJX', ''), json=conf)
+          r = requests.put(url, headers={'Content-Type': 'application/json'}, auth=HTTPDigestAuth(getOMKey, getOMSECRET), json=conf)
           
           return r
 
@@ -77,24 +83,7 @@ def enableAuthMechanismsForProject(groupId, ldapConfig, ldapRoles):
     # conf.get('auth')['autoPwd'] = 'password'
     conf.get('auth')['autoLdapGroupDN'] = 'cn=admins,ou=groups,dc=ldap,dc=mongodb,dc=local'
     conf.get('auth')['key'] = key
-    # conf.get('auth')['usersWanted'] = [
-    #     {
-    #         'db': 'admin',
-    #         'initPwd': f'{initPwd}',
-    #         'user': 'mms-monitoring-agent',
-    #         'roles': [{'db': 'admin', 'role': 'clusterMonitor'}]
-    #     }, {
-    #         'db': 'admin',
-    #         'initPwd': f'{initPwd}',
-    #         'user': 'mms-backup-agent',
-    #         'roles': [
-    #               {'db': 'local', 'role': 'readWrite'},
-    #               {'db': 'admin', 'role': 'clusterAdmin'},
-    #               {'db': 'admin', 'role': 'readAnyDatabase'},
-    #               {'db': 'admin', 'role': 'userAdminAnyDatabase'}
-    #         ]
-    #     }
-    # ]
+
     conf['ldap'] = always_merger.merge({
         'validateLDAPServerConfig': True,
         'bindMethod': 'simple',
