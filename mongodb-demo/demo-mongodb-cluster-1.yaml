@@ -6,11 +6,20 @@ metadata:
   # namespace: project1
 spec:
   members: 3
-  version: 4.2.3-ent
+  version: 4.2.6-ent
   type: ReplicaSet
 
   opsManager:
     configMapRef:
       name: demo-cluster-1
   credentials: opsmanager-org-access-key
-
+  persistent: true
+  podSpec:
+    cpu: '0.25'
+    # note: it's important to always specify memory otherwise wired tiger cache will be calculated incorrectly and
+    # monitoring tools will report the size of Kubernetes node instead of the real size of the container
+    memory: 512M
+    # "multiple" persistence allows to mount different directories to different Persistent Volumes
+    persistence:
+      single:        
+          storage: 10Gi
