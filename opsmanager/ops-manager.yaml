@@ -15,14 +15,18 @@ spec:
   # Either remove the secret or change the password using Ops Manager UI after the Ops Manager
   # resource is created!
   adminCredentials: adminopsmanager  
-  podSpec:
-    podTemplate:
+  statefulSet:
+    spec:
+      volumeClaimTemplates:
+      - metadata:
+        name: opsmanager-packages-volume
         spec:
-          volumes:
-            - name: opsmanager-packages-volume
-              # replace this with a real persistent volume
-              persistentVolumeClaim:
-                claimName: opsmanager-packages-claim
+          accessModes: [ "ReadWriteOnce" ]
+          resources:
+            requests:
+              storage: 1Gi
+      template:
+        spec:
           containers:
             - name: mongodb-ops-manager
               volumeMounts:
