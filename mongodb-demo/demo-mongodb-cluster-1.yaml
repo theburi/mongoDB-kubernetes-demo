@@ -9,6 +9,14 @@ spec:
   version: 4.2.6-ent
   type: ReplicaSet
 
+  security:
+    tls:
+      enabled: true
+      ca: ca-db1
+  authentication:
+    enabled: true
+    modes: [“X509”, "SHA"]
+
   opsManager:
     configMapRef:
       name: demo-cluster-1

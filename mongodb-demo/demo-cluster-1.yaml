@@ -6,9 +6,12 @@ metadata:
   # namespace: m
 data:
   projectName: demo-cluster-1
-  baseUrl: http://a55fbb5a2848f11eaaa090214ecb1cab-857889018.eu-west-1.elb.amazonaws.com:8080
+  baseUrl: https://a477f4b63df22418b9cd39d3e7d33f5e-1134279687.eu-west-1.elb.amazonaws.com:8443
 
   # Optional parameters
 
   # If orgId is omitted a new organization will be created, with the same name as the Project.
-  orgId: 5ea033ab894e8200786431a7
+  orgId: 5f2d31e2eb94525b99e9d30e
+
+  sslMMSCAConfigMap: ca-om
+  sslRequireValidMMSServerCertificates: ‘true’

@@ -25,7 +25,7 @@ However OpsManager will be shared between all MogoDB clusters/Operator in your o
 ** Create Secrete to store Ops Manager APi Key
 this secrete could be used for all MongoDB clusters deployed in this namespace. 
 ```
-kubectl create secret generic opsmanager-org-access-key  --from-literal="user=ETFBXKUH" --from-literal="publicApiKey=20b3bab8-10d8-4de0-9db5-529569dc053e"
+kubectl create secret generic opsmanager-org-access-key  --from-literal="user=LFBQEYDP" --from-literal="publicApiKey=9af0ce8b-c88d-4521-a22f-db5fcacf8a9e"
 ```
 ** Create config map `demo-cluster-1` for our first MongoDB Cluster
 

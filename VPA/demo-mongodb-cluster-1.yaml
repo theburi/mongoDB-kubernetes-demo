@@ -3,7 +3,7 @@ apiVersion: mongodb.com/v1
 kind: MongoDB
 metadata:
   name: demo-mongodb-cluster-1
-  namespace: kube-system
+  namespace: mongodb
 spec:
   members: 3
   version: 4.2.3-ent
@@ -12,15 +12,22 @@ spec:
   opsManager:
     configMapRef:
       name: demo-cluster-confmap
-  credentials: cm-credentials
-  
-  subresources:
-    # status enables the status subresource.
-
-    scale:
-      specReplicasPath: .spec.members
-      statusReplicasPath: .status.replicas
-      labelSelectorPath: .status.selector
+  credentials: opsmanager-org-access-key
 
 
+  podSpec:
+    # "multiple" persistence allows to mount different directories to different Persistent Volumes
+    persistence:
+      single:        
+          storage: 10Gi
+    podTemplate:
+      spec:
+        # This container will be added to each pod as a sidecar
+        containers:
+        - name: mongodb-enterprise-database
+          resources:
+            limits:
+              memory: "200M"
+            requests:
+              memory: "100M"
 

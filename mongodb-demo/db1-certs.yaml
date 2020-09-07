@@ -1,0 +1,66 @@
+# server-certificates.yaml
+#
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: demo-mongodb-cluster-1-0
+  namespace: mongodb
+spec:
+  dnsNames:
+  - demo-mongodb-cluster-1-0
+  - demo-mongodb-cluster-1-0.demo-mongodb-cluster-1-svc.mongodb.svc.cluster.local
+  duration: 2400h0m0s
+  issuerRef:
+    name: ca-issuer
+  renewBefore: 120h0m0s
+  secretName: demo-mongodb-cluster-1-0
+  subject:
+    organizationalUnits:
+    - Your Company
+  usages:
+  # All Server TLS certs need to be created with “server auth” usage!
+  - server auth
+  - client auth
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: demo-mongodb-cluster-1-1
+  namespace: mongodb
+spec:
+  dnsNames:
+  - demo-mongodb-cluster-1-1
+  - demo-mongodb-cluster-1-1.demo-mongodb-cluster-1-svc.mongodb.svc.cluster.local
+  duration: 2400h0m0s
+  issuerRef:
+    name: ca-issuer
+  renewBefore: 120h0m0s
+  secretName: demo-mongodb-cluster-1-1
+  subject:
+    organizationalUnits:
+      - Your Company
+  usages:
+  - server auth
+  - client auth
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: demo-mongodb-cluster-1-2
+  namespace: mongodb
+spec:
+  dnsNames:
+  - demo-mongodb-cluster-1-2
+  - demo-mongodb-cluster-1-2.demo-mongodb-cluster-1-svc.mongodb.svc.cluster.local
+  duration: 2400h0m0s
+  issuerRef:
+    name: ca-issuer
+  renewBefore: 120h0m0s
+  secretName: demo-mongodb-cluster-1-2
+  subject:
+    organizationalUnits:
+    - Your Company
+  usages:
+  - server auth
+  - client auth

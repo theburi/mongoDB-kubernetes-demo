@@ -3,12 +3,12 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: demo-cluster-confmap
-  namespace: kube-system
+  namespace: mongodb
 data:
   projectName: demo-cluster-vpa1
-  baseUrl: https://cloud.mongodb.com
+  baseUrl: http://ad91a87799eb411eaa1ac0a80b57193a-1378689828.eu-west-1.elb.amazonaws.com:8080
 
   # Optional parameters
 
   # If orgId is omitted a new organization will be created, with the same name as the Project.
-  orgId: 5b30f7d7d383ad6499f230b1
+  orgId: 5ed0f2e37a4e6b005b5b6388

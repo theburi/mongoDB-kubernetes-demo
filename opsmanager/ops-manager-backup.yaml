@@ -57,5 +57,5 @@ spec:
     # optional, corresponds to nodePort port
     # port: 30100
   backup:
-    enabled: false
+    enabled: true
    

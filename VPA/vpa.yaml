@@ -2,11 +2,22 @@ apiVersion: autoscaling.k8s.io/v1beta2
 kind: VerticalPodAutoscaler
 metadata:
   name: demo-mongodb-cluster-1-vpa
-  namespace: kube-system
+  namespace: mongodb
 spec:
   targetRef:
     apiVersion: "apps/v1"
     kind: StatefulSet
-    name: demo-mongodb-cluster-1
+    name: mongodb-db-small
+    resourcePolicy:
+      containerPolicies:
+        - containerName: '*'
+          minAllowed:
+            cpu: 100m
+            memory: 10M
+          maxAllowed:
+            cpu: 1
+            memory: 700M
+          controlledResources: ["cpu", "memory"]
+
   updatePolicy:
-    updateMode: "Off"
+    updateMode: "Auto"

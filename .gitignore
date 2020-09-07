@@ -1,2 +1,3 @@
 cart_service/node_modules
 */secret.yaml
+metrics-server-0.3.6/*

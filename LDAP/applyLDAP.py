@@ -10,7 +10,11 @@ getOMKey = os.getenv('OM_KEY')
 getOMSECRET = os.getenv('OM_SECRET')
 OMGroupID = os.getenv('OM_GROUPID')
 OMServer =   os.getenv('OM_SERVER')
-
+getOMKey = 'LNTMCKJX'
+getOMSECRET = 'e71aec97-903a-4d61-a9fa-ceb715dc8cc5'
+OMGroupID = '5eaadf5a8527230070824499'
+# OMGroupID = '5ea073b6855fd50076687bc3'
+OMServer = 'http://a55fbb5a2848f11eaaa090214ecb1cab-857889018.eu-west-1.elb.amazonaws.com:8080'
 
 
 def randomString(stringLength=96):
@@ -132,7 +136,6 @@ def enableAuthMechanismsForProject(groupId, ldapConfig, ldapRoles):
 
       # Authentication in OpsManager Project is not enabled yet, enabling it...
     key = randomString()
-    # initPwd = 'askldalkdjlasdjakjkle4askdjlvn'
     conf.get('auth')['disabled'] = False
     conf.get('auth')['authoritativeSet'] = True
     # conf.get('auth')['autoAuthMechanisms']        = ['SCRAM-SHA-256', 'MONGODB-CR']
@@ -143,7 +146,8 @@ def enableAuthMechanismsForProject(groupId, ldapConfig, ldapRoles):
     conf.get('auth')['autoUser'] = 'agentuser'
     conf.get('auth')['autoPwd'] = 'password'
     conf.get('auth')['autoLdapGroupDN'] = 'cn=admins,ou=groups,dc=ldap,dc=mongodb,dc=local'
-    # conf.get('auth')['key'] = key
+    if conf.get('auth')['disabled'] :
+        conf.get('auth')['key'] = key
 
     conf['ldap'] = always_merger.merge({
         'validateLDAPServerConfig': True,
@@ -155,10 +159,10 @@ def enableAuthMechanismsForProject(groupId, ldapConfig, ldapRoles):
     # update the automation config
    
     res = putAutomationConfig(groupId, conf)
-
+    # print (res.json())
     # Monitoring config
     Monitoringconf = getMonitoringConfig(groupId)
-    print (Monitoringconf)
+    # print (Monitoringconf)
     Monitoringconf['username'] = 'jane'
     Monitoringconf['ldapGroupDN'] = 'cn=admins,ou=groups,dc=ldap,dc=mongodb,dc=local'
     Monitoringconf['password'] = 'password'
@@ -166,7 +170,7 @@ def enableAuthMechanismsForProject(groupId, ldapConfig, ldapRoles):
 
     # Backup config
     Backupconf = getBackupConfig(groupId)
-    print (Backupconf)
+    # print (Backupconf)
     Backupconf['username'] = 'jane'
     Backupconf['ldapGroupDN'] = 'cn=admins,ou=groups,dc=ldap,dc=mongodb,dc=local'
     Backupconf['password'] = 'password'

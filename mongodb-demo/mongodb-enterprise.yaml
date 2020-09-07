@@ -127,8 +127,8 @@ subjects:
 ---
 apiVersion: v1
 kind: ServiceAccount
-metadata:
-  name: mongodb-enterprise-appdb
+metadata:mongodb-enterprise-appdb
+  name: 
   namespace: project1
 
 ---

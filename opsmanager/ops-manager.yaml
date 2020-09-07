@@ -9,7 +9,7 @@ spec:
   replicas: 2
 
   # the version of Ops Manager distro to use
-  version: 4.2.8
+  version: 4.4.0
 
   # the name of the secret containing admin user credentials.
   # Either remove the secret or change the password using Ops Manager UI after the Ops Manager
@@ -19,7 +19,7 @@ spec:
     spec:
       volumeClaimTemplates:
       - metadata:
-        name: opsmanager-packages-volume
+          name: opsmanager-packages-volume
         spec:
           accessModes: [ "ReadWriteOnce" ]
           resources:
@@ -30,16 +30,18 @@ spec:
           containers:
             - name: mongodb-ops-manager
               volumeMounts:
-                - mountPath: /mongodb-ops-manager/mongodb-releases/
-                  name: opsmanager-packages-volume
+                - name: opsmanager-packages-volume
+                  mountPath: /mongodb-ops-manager/mongodb-releases/
+                  
           # imagePullSecret:
           #   - name: regcred
 
+  
   # the Ops Manager configuration. All the values must be of type string
   configuration:
     mms.fromEmailAddr: "test@test.com"
-    automation.versions.source: "local"
-    automation.versions.directory: "/mongodb-ops-manager/mongodb-releases/"
+    # automation.versions.source: "local"
+    # automation.versions.directory: "/mongodb-ops-manager/mongodb-releases/"
     mms.preflight.run: "false"
     mms.ignoreInitialUiSetup: "true"    
     mms.replyToEmailAddr: "test@test.com"
@@ -56,6 +58,21 @@ spec:
     persistent: true
     podSpec:
       cpu: '0.25'
+      podTemplate:
+        spec:
+          volumes:
+            - name: data-temp
+              persistentVolumeClaim:
+                claimName: data-temp
+          containers:
+            - name: appdb-sidecar
+              image: busybox
+              command: ["sleep"]
+              args: [ "infinity" ]
+              volumeMounts:
+                - name: data-temp
+                  mountPath: /data-temp
+
   externalConnectivity:
     # LoadBalancer|NodePort
     type: LoadBalancer

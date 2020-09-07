@@ -1,0 +1,23 @@
+# server-certificates.yaml
+#
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: ops-manager
+  namespace: mongodb
+spec:
+  dnsNames:
+  - '*.eu-west-1.elb.amazonaws.com'
+  - ops-manager-svc.mongodb.svc.cluster.local
+  duration: 240h0m0s
+  issuerRef:
+    name: ca-issuer
+  renewBefore: 120h0m0s
+  secretName: ops-manager
+  subject:
+    organizationalUnits:
+    - Your Company
+  usages:
+  # All Server TLS certs need to be created with “server auth” usage!
+  - server auth
