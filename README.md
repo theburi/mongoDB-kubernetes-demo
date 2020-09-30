@@ -37,7 +37,7 @@ clusterrole.rbac.authorization.k8s.io/mongodb-enterprise-operator-mongodb-webhoo
    ```bash
    cd ..
    kubectl apply -f namespace.yml
-   kubectl config set-context current-context --namespace=mongodb
+   kubectl config set-context --current --namespace=mongodb
    ```
 
    Now we are ready to deploy our operator.

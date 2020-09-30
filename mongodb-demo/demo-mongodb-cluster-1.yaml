@@ -3,16 +3,12 @@ apiVersion: mongodb.com/v1
 kind: MongoDB
 metadata:
   name: demo-mongodb-cluster-1
-  # namespace: project1
+  namespace: mongodb
 spec:
   members: 3
   version: 4.2.6-ent
   type: ReplicaSet
 
-  security:
-    tls:
-      enabled: true
-      ca: ca-db1
   authentication:
     enabled: true
     modes: [“X509”, "SHA"]
@@ -20,7 +16,7 @@ spec:
   opsManager:
     configMapRef:
       name: demo-cluster-1
-  credentials: opsmanager-org-access-key
+  credentials: ops-manager-admin-key
   persistent: true
   podSpec:
     cpu: '0.25'
