@@ -6,8 +6,8 @@
 managedSecurityContext: false
 
 # Section to describe components that needs to be installed
-deployOperator: true
-deployValidationWebhooks: true # Optional configuration.
+deployOperator: false
+deployValidationWebhooks: false # Optional configuration.
 
 
 clusterName: cluster.local
@@ -37,39 +37,43 @@ operator:
 
 
 dataBase:
-  name: mdbreplset 
-  type: ReplicaSet
-  members: 3
+  name: mdbshard
+  type: ShardedCluster
   version: 4.4.0-ent
   opsManager:
-    URL: "http://a2fbcb181660c4589afae30959c8218a-2143866689.eu-west-1.elb.amazonaws.com:8080"
-    APIKey: "UZMWOTAX"
-    APISecret: "7b9b5641-cfee-42ed-8d0e-44667d51d2ea"
-    orgid: "5f6e1653a0b3b16931c7a3ae"  
-  resources: 
-    limits:
-      cpu: 2
-      memory: 1.5G
-    requests:
-      cpu: 1
-      memory: 1G
+    URL: "http://a4ca5e132cf524d7f844a2496475a791-1306499266.eu-west-1.elb.amazonaws.com:8080"
+    APIKey: "JYRQENZZ"
+    APISecret: "06370a71-734a-4d8d-82fc-33af5d1b2562"
+    orgid: "5f7df975665e2f03a9daa6f6"  
   
-  # Enable External to Kubernetes Replicaset Connectivity
-    # replicaSetHorizons consists of a list of maps where each map represents a node within
-    # the replica set and maps names of DNS horizons to externally connectable DNS names.
-    # In the following example, this would allow a client to make a replica set connection
-    # from outside the replica set using a connection string like
-    # mongodb://mdb0-test-website.com:1337,mdb1-test-website.com:1338,mdb2-test-website.com:1339.
-    # The length of the replicaSetHorizons list must be equal to the number of the members in the
-    # replica set and each member should have all of the same DNS horizon names specified.
-  # connectivity:
-  #   replicaSetHorizons:
-  #     - "test-horizon-1": "mdb0-test-website.com:1337"
-  #       "test-horizon-2": "mdb0-test-internal-website.com:2337"
-  #     - "test-horizon-1": "mdb1-test-website.com:1338"
-  #       "test-horizon-2": "mdb1-test-internal-website.com:2338"
-  #     - "test-horizon-1": "mdb2-test-website.com:1339"
-  #       "test-horizon-2": "mdb2-test-internal-website.com:2339"
+  configServer:
+    count: 3
+    resources: 
+      limits:
+        cpu: 0.5
+        memory: 600M
+      requests:
+        cpu: 1
+        memory: 400M
+  mongos:
+    count: 2
+    perShardCount: 2
+    resources: 
+      limits:
+        cpu: 1
+        memory: 200M
+      requests:
+        cpu: 0.5
+        memory: 100M
+  shard:
+    count: 2
+    resources: 
+      limits:
+        cpu: 2
+        memory: 1.5G
+      requests:
+        cpu: 1
+        memory: 1G
 
 registry:
   # Redhat repository is registry.connect.redhat.com/mongod

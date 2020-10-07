@@ -11,11 +11,17 @@ metadata:
   
 spec:
   type: {{ .Values.dataBase.type | quote }}
+  {{- if eq .Values.dataBase.type "ShardedCluster" }}
+  shardCount: {{ .Values.dataBase.shard.count}}
+  mongodsPerShardCount: {{ .Values.dataBase.mongos.perShardCount}}
+  mongosCount: {{ .Values.dataBase.mongos.count}}
+  configServerCount: {{ .Values.dataBase.configServer.count }}
+  {{- else }}
   members: {{ .Values.dataBase.members }}
-
+  {{- end }}
   # Using a version >= 4.0 will enable SCRAM-SHA-256 authentication
   # setting a version < 4.0 will enable SCRAM-SHA-1/MONGODB-CR authentication
-  version: 4.0.4-ent
+  version: {{ .Values.dataBase.version }}
 
   opsManager:
     configMapRef:
@@ -33,6 +39,7 @@ spec:
 
       # If you need to manage MongoDB users directly via the mongods, set this value to true
       ignoreUnknownUsers: false # default value false
+  {{- if ne .Values.dataBase.type "ShardedCluster" }}
   podTemplate:
     spec:
         # This container will be added to each pod as a sidecar
@@ -46,5 +53,29 @@ spec:
   {{- with .Values.dataBase.connectivity }}
   connectivity:
     {{- toYaml . | indent 4 }}
+  
+  {{- else }}
+  configSrvPodSpec:
+    podTemplate:
+      spec:        
+        containers:
+          - name: mongodb-enterprise-database
+            resources:
+              {{- toYaml .Values.dataBase.configServer.resources | nindent 14 }}
+  shardPodSpec:
+    podTemplate:
+      spec:        
+        containers:
+          - name: mongodb-enterprise-database
+            resources:
+              {{- toYaml .Values.dataBase.shard.resources | nindent 14 }}
+  mongosPodSpec:
+    podTemplate:
+      spec:        
+        containers:
+          - name: mongodb-enterprise-database
+            resources:
+              {{- toYaml .Values.dataBase.mongos.resources | nindent 14 }}
+  {{- end }}
   
   {{- end }}

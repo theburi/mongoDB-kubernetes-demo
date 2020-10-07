@@ -89,7 +89,7 @@ registry:
     Image: quay.io/mongodb/mongodb-enterprise-operator
     Tag: 1.7.1
 
-  database:
+  dataBase:
     Image: quay.io/mongodb/mongodb-enterprise-database:1.7.1
 
   opsManager:
